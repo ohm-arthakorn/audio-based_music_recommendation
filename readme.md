@@ -15,5 +15,5 @@
 ---
 
 ### References
-[1] https://www.audiolabs-erlangen.de/resources/MIR/FMP/C0/C0.html
+[1] https://www.audiolabs-erlangen.de/resources/MIR/FMP/C0/C0.html \
 [2] https://en.wikipedia.org/wiki/Hidden_Markov_model
