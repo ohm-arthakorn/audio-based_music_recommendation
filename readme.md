@@ -11,3 +11,9 @@
 1. Audio DSP Foundations 
 * ศึกษาเรื่องของพื้นฐานเสียงและทฤษฎีดนตรี (Music Theory)
 * ศึกษาเรื่อง Digital Signal Processing หรือ DSP 
+
+---
+
+### References
+[1] https://www.audiolabs-erlangen.de/resources/MIR/FMP/C0/C0.html
+[2] https://en.wikipedia.org/wiki/Hidden_Markov_model
