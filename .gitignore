@@ -1,0 +1,9 @@
+# roadmap of projects
+audio-based_recom.md
+
+# environment Python 
+.venv
+
+# Python cache
+__pycache__/
+.ipynb_checkpoints/
