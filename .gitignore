@@ -7,3 +7,8 @@ audio-based_recom.md
 # Python cache
 __pycache__/
 .ipynb_checkpoints/
+
+# Dataset and audio
+data/
+*.mp3
+*.wav
