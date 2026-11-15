@@ -7,9 +7,9 @@
 
 ---
 
-### Roadmap การพัฒนาของ Project
-1. Audio DSP Foundations 
-* ศึกษาเรื่องของพื้นฐานเสียงและทฤษฎีดนตรี (Music Theory)
+### Roadmap การพัฒนาแต่ละ Phase 
+**1. Phase 1 : Audio DSP Foundations**
+* สร้างความเข้าใจในโครงสร้างข้อมูลเสียง (Audio Signal) และการแปลงสัญญาณเบื้องต้น
 * ศึกษาเรื่อง Digital Signal Processing หรือ DSP 
 
 ---
