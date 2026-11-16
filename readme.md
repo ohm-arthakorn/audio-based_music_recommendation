@@ -16,4 +16,5 @@
 
 ### References
 [1] https://www.audiolabs-erlangen.de/resources/MIR/FMP/C0/C0.html \
-[2] https://en.wikipedia.org/wiki/Hidden_Markov_model
+[2] https://en.wikipedia.org/wiki/Hidden_Markov_model \
+[3] https://dr-pathasu-doung.medium.com/mel-frequency-cepstrum-coefficient-mfcc-b735a349c312
