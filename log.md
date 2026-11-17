@@ -37,3 +37,10 @@ $$f = 440 \times 2^{(n-69)/12}$$
 
 > **MFCC (Mel-frequency cepstrum coefficient)** : 
 ref : https://dr-pathasu-doung.medium.com/mel-frequency-cepstrum-coefficient-mfcc-b735a349c312
+
+---
+
+**17 November 2026**
+* เรียนเขียนโปรแกรมโดยมีการใช้งาน Numpy สำหรับการจัดการเสียง เช่น Slicing, เปรียบเทียบสัญญาณ np.allclose(), การ Normalize, Broadcasting
+
+> อันนี้เป็นความคิดเห็นส่วนตัว : เป็นการเรียนทำ Lab ที่หินมาก คือ Claude มันตรวจแบบเถื่อนในระดับที่เราเองเป็นคนทำยังท้อ มันตรวจละเอียดมาก ความละเอียดของมันเนี่ย ยิบย่อยในระดับงานเนียบอ่ะ ถ้าเราผ่านมาได้นะ บอกเลยว่า มึงเป็นคนที่เนียบฉิบหาย
