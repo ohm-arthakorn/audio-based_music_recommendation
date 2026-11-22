@@ -102,7 +102,7 @@
 **Objective :** ถ้าทำได้ครบ โอมจะเห็นว่าสัญญาณเสียงคือเวกเตอร์ยาว ๆ และ dot product คือเครื่องมือวัดว่า "สองอย่างเหมือนกันแค่ไหน" สูตร cosine similarity ที่เขียนวันนี้คือสูตรเดียวกับที่จะใช้แนะนำเพลงใน Phase 1 ส่วนการเอา sine ไป dot กับสัญญาณเพื่อหาความถี่ คือหัวใจของ DFT ที่จะเรียนต่อไป
 
 **Tasks :**
-- [ ] V1 (ทฤษฎี + โค้ด) dot product และ cosine similarity — อ่าน ThinkDSP บทที่ 6 ช่วงต้น (หัวข้อ Synthesis และ Analysis)
+- [x] V1 (ทฤษฎี + โค้ด) dot product และ cosine similarity — อ่าน ThinkDSP บทที่ 6 ช่วงต้น (หัวข้อ Synthesis และ Analysis)
   - **ทำ:**
     - สร้าง notebook ใหม่ `notebooks/04_Signals_as_Vectors.ipynb`
     - เขียน `dot_loop(a, b)` ด้วย for loop (คูณทีละคู่แล้วบวก) → ทดสอบ `[1, 2, 3]` กับ `[4, 5, 6]` แล้วเทียบกับ `np.dot`
