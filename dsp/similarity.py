@@ -44,4 +44,3 @@ if __name__ == "__main__":
     print(f"Cosine Similarity no.3 : {cosine_similarity([1,0],[-1,0])}")
     print(f"Cosine Similarity no.4 : {cosine_similarity([1,1],[1,0])}")
     print(f"Cosine Similarity no.5 : {cosine_similarity([0,0],[1,2])}")
-    
