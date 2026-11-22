@@ -112,6 +112,8 @@ ___
 สมการสำคัญของ Cosine Similarity คือ การหามุมระหว่าง vector หรือ Dot Product
 $cos(\theta) = \frac{\textbf{A} \cdot \textbf{B}}{|| \textbf{A} || ||\textbf{B}||}$
 
+ระหว่างการทำ Lab วันนี้มี Keyword สำคัญคือ เรื่องของ **Windowing** และ **Short time Fourier Transform** โดย Lab สองคำนี้คือ การทำเรื่องของ Cosine Similarity ระหว่าง คลื่น Sine ที่มีความถี่เท่ากับ 440 และ 445 Hz โดยมีการกำหนดระยะเวลาของการทำ Cosine Similarity ที่แตกต่างกัน คือ 1 และ 0.05 วินาที ในระยะเวลาที่สั้นมาก ๆ Cosine Similarity กลับไม่สามารถจำแนกความแตกต่างระหว่างคลื่น Sine 440 กับ 445 ได้
+
 
 
 
