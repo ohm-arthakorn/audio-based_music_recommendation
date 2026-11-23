@@ -150,7 +150,7 @@
 **Objective :** ใน V3 โอมเจอว่า probe แบบ sine อย่างเดียวพลาดคลื่นที่เฟสต่างไป วันนี้จะเห็นว่า $e^{j\theta}$ หนึ่งตัวมีทั้ง cos และ sin อยู่ในตัว จึงเป็น probe ที่จับได้ทุกเฟส และ DFT ก็คือการเอา probe แบบนี้ไป dot กับสัญญาณทีละความถี่ การอ่าน spectrum (bin → Hz, ขนาด → แอมพลิจูด) คือพื้นฐานของ spectrogram, Mel และ MFCC ที่จะใช้ดึง feature เพลง
 
 **Tasks :**
-- [ ] F1 (ทฤษฎี + โค้ด) จำนวนเชิงซ้อนและสูตรของออยเลอร์ — อ่าน ThinkDSP บทที่ 7 หัวข้อ 7.1 Complex exponentials
+- [x] F1 (ทฤษฎี + โค้ด) จำนวนเชิงซ้อนและสูตรของออยเลอร์ — อ่าน ThinkDSP บทที่ 7 หัวข้อ 7.1 Complex exponentials
   - **ทำ:**
     - สร้าง notebook ใหม่ `notebooks/05_DFT.ipynb`
     - `z = 3 + 4j` → print `z.real`, `z.imag`, `np.abs(z)`, `np.angle(z)`
