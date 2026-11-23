@@ -55,7 +55,7 @@ ___
 
 ---
 
-20 November 2026 (20 พฤศจิกายน 2569)
+**20 November 2026 (20 พฤศจิกายน 2569)**
 **Ref :** https://www.youtube.com/watch?v=XQ45IgG6rJ4&list=PL-wATfeyAMNqIee7cH3q1bh4QJFAaeNv0&index=10
 
 **1. แนวคิดของ Fourier Transform** 
@@ -102,7 +102,7 @@ Fourier Transform หรือ การแปลงฟูเรียร์ ค
 
 ___
 
-22 November 2026 (22 พฤศจิกายน 2569)
+**22 November 2026 (22 พฤศจิกายน 2569)**
 หัวข้อที่เรียนวันนี้ คือ **Cosine Similarity (ความคล้ายคลึงแบบโคไซน์)** เป็นค่าที่เอาไว้ใช้สำหรับการวัดว่า **"vector 2 ตัว ชี้ไปในทิศทางเดียวกันใกล้เคียงมากน้อยเพียงใด"** ความสำคัญของมันคือ ในการทำ project นี้จะมีการแปลงจากข้อมูลสัญญาณเสียงเป็นข้อมูลจากเวกเตอร์ที่คอมพิวเตอร์สามารถคำนวณได้ Cosine Similarity จึงสามารถนำมาใช้เพื่อจัดกลุ่ม จัดประเภทของข้อมูลเสียงได้ 
 
 <div align="center">
@@ -114,7 +114,20 @@ $cos(\theta) = \frac{\textbf{A} \cdot \textbf{B}}{|| \textbf{A} || ||\textbf{B}|
 
 ระหว่างการทำ Lab วันนี้มี Keyword สำคัญคือ เรื่องของ **Windowing** และ **Short time Fourier Transform** โดย Lab สองคำนี้คือ การทำเรื่องของ Cosine Similarity ระหว่าง คลื่น Sine ที่มีความถี่เท่ากับ 440 และ 445 Hz โดยมีการกำหนดระยะเวลาของการทำ Cosine Similarity ที่แตกต่างกัน คือ 1 และ 0.05 วินาที ในระยะเวลาที่สั้นมาก ๆ Cosine Similarity กลับไม่สามารถจำแนกความแตกต่างระหว่างคลื่น Sine 440 กับ 445 ได้
 
+___
 
+**23 November 2026 (23 พฤศจิกายน 2569)**
+หัวข้อที่ทำแล็ปวันนี้ เรื่อง Fourier Transform โดยจะเน้นที่ Discrete Fourier Transform หรือ DFT \
+Fourier Transform เป็นเทคนิคทางคณิตศาสตร์อย่างหนึ่งที่คิดค้นโดย Jean-Baptiste Joseph Fourier โดยสมมติฐานของ Fourier บอกว่า "ฟังก์ชันหรือรูปทรงของคลื่นใด ๆ ก็ตาม ไม่ว่าซับซ้อนหรือหักมุมขนาดไหน ก็ล้วนสามารถสร้างขึ้นได้ด้วยคลื่นไซน์และโคไซน์ที่ความถี่ต่าง ๆ มาบวกรวมกันได้" 
+
+<div align="center">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/d/df/Fourier2_-_restoration1.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" alt="Jean-Baptiste Joseph Fourier" height="400px">
+</div>
+
+และด้วยแนวคิดนั้นกลับกลายเป็นหัวใจสำคัญของวิศวกรรมสมัยใหม่ เช่น Signal Processing, Heat Transfer หรือสัญญาณหรือคลื่นใด ๆ ก็สามารถนำเอาความรู้ที่ Fourier ได้คิดค้นมาใช้ได้
+
+สมการของ Discrete Fourier Transform : $X(k) = \sum_{n=1}^{N}x(n)e^{-j\omega_{k}n}$
+เมื่อ $k=0,1,...,N$
 
 
 
