@@ -249,7 +249,7 @@
     2. `frames.shape` ของสัญญาณ 3 โน้ตเป็นเท่าไร
     3. เฟรมที่ 3 เริ่มที่ sample ที่เท่าไร
   - **เสร็จเมื่อ:** import `frame_signal` จาก `dsp.spectral` ได้ / ทดสอบตัวเลขเล็กได้ True / shape ได้ `(45, 512)` / `np.allclose` ได้ True และตอบครบ 3 ข้อ
-- [ ] ST3 (โค้ด + หู) STFT และ spectrogram: FFT ทั้งก้อน vs ทีละเฟรม
+- [x] ST3 (โค้ด + หู) STFT และ spectrogram: FFT ทั้งก้อน vs ทีละเฟรม
   - **ทำ:**
     - ฟัง `x` จาก ST2 ด้วย `Audio(x, rate=sr)`
     - สร้าง `x_rev` = 3 โน้ตเดิมแต่เรียงกลับ (880, 660, 440)
@@ -267,6 +267,6 @@
     2. ที่ m = 20 ความถี่ที่ดังสุดคือกี่ Hz
     3. `freqs[1] - freqs[0]` ได้กี่ Hz
   - **เสร็จเมื่อ:** `np.allclose` ได้ True / `S.shape` ได้ `(45, 257)` / m = 5, 20, 40 ได้ 437.5, 656.25, 875.0 / ระยะ bin 15.625 / มี spectrogram 2 รูปที่เห็นเส้นเป็นขั้นบันไดคนละทิศ และตอบครบ 3 ข้อ
-- [ ] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
+- [x] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
 
 ---
