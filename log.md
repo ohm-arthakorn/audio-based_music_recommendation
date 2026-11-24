@@ -129,7 +129,23 @@ Fourier Transform เป็นเทคนิคทางคณิตศาส�
 สมการของ Discrete Fourier Transform : $X(k) = \sum_{n=1}^{N}x(n)e^{-j\omega_{k}n}$
 เมื่อ $k=0,1,...,N$
 
+___ q
 
+**24 November 2026 (24 พฤศจิกายน 2569)**
+หัวข้อของการทำแล็ปในวันนี้ คือ STFT (Short Time Fourier Transform) ซึ่งเป็นวิธีการวิเคราะห์แบบหนึ่งที่มีการใช้งาน Fourier Transform เหมือนกัน ความแตกต่างจะอยู่ที่ในการใช้ไม่ว่าจะเป็น DFT/FFT สิ่งที่จะเป็น output ออกมาคือ Frequency Spectrum หรือ องค์ประกอบความถี่ของสัญญาณ ว่าสัญญาณที่เราสนใจสามารถสังเคราะห์จากคลื่นไซน์หรือคลื่นโคไซน์ความถี่ที่แตกต่างกัน แต่บางครั้งเวลาก็สามารถเป็นส่วนหนึ่งของการวิเคราะห์สัญญาณของเราได้เช่นกัน \
+STFT หรือ Short Time Fourier Transform จึงมีข้อได้เปรียบที่เหนือกว่า DFT/FFT ในส่วนนี้ 
+> หลักการของการทำ STFT คือ การแบ่งสัญญาณที่เราสนใจออกเป็นก้อน ๆ ซึ่งเราจะเรียกมันว่า **Frame** จากนั้นเราก็จะทำการ FFT ตัว Frame นั้นเพื่อให้ได้ Frequency Spectrum ออกมา เราสามารถทำแบบนี้ไปเรื่อย ๆ กับทั้งสัญญาณได้ ก็จะได้เป็น Frequency Spectrum ที่เป็นก้อน ๆ มาต่อ ๆ แล้วถ้าเราทำการใส่สีให้กับขนาดของความถี่นั้น ๆ และทำการพล็อตระหว่างเวลาและความถี่ เราก็จะได้สิ่งที่เรียกว่า **Spectrogram** ออกมาซึ่งเป็นสิ่งสำคัญในการวิเคราะห์สัญญาณที่มีเรื่องของเวลาเข้ามาเกี่ยวข้อง
+
+<div align="center">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Spectrogram-19thC.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" alt="Spectrogram" width="400px">
+</div>
+
+สมการที่สำคัญของการทำ STFT
+> $X[m,k]=\sum_{n=0}^{N-1}x[n+mH]\cdot w[k]\cdot e^{\frac{-j2\pi kn}{N}}$
+
+โดยที่ตัวแปร $m$ คือ Index ของ Frame, $H$ คือ Hop Size และ $w[k]$ คือ Windowing Function
+
+Windowing Function มีหน้าที่เอาไว้สำหรับการบีบสัญญาณของเราเพื่อป้องกัน **Spectral Leakage**
 
 
 
