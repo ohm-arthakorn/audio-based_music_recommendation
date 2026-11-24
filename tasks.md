@@ -212,7 +212,7 @@
 **Objective :** เมื่อวาน **FFT บอกได้ว่ามีความถี่อะไรบ้าง แต่บอกไม่ได้ว่าเกิด "ตอนไหน"** วันนี้โอมจะหั่นสัญญาณเป็นเฟรม คูณ window แล้ว FFT ทีละเฟรม จนได้ spectrogram ที่เห็นทั้งเวลาและความถี่ สิ่งนี้คือสิ่งที่ `librosa.stft` ทำ และเป็นฐานของ `Mel spectrogram`, MFCC และ `Chroma` ที่จะใช้เป็น feature ของเพลง
 
 **Tasks :**
-- [ ] ST1 (โค้ด + สังเกต) Spectral leakage และ Hann window
+- [x] ST1 (โค้ด + สังเกต) Spectral leakage และ Hann window
   - **ทำ:**
     - สร้าง notebook ใหม่ `notebooks/06_STFT.ipynb`
     - `sr = 1000` สร้าง `t` 1 วินาที → `N` ได้ 1000
