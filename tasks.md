@@ -204,3 +204,69 @@
 - [x] Restart & Run All แล้ว commit notebook, `log.md` และ `tasks.md`
 
 ---
+
+**Date :** 24 November 2026 (24 พฤศจิกายน 2569)
+
+**Goals :** เริ่ม Unit 5 STFT: เห็น spectral leakage กับหน้าที่ของ window แล้วหั่นสัญญาณเป็นเฟรมจนได้ spectrogram ของตัวเอง
+
+**Objective :** เมื่อวาน **FFT บอกได้ว่ามีความถี่อะไรบ้าง แต่บอกไม่ได้ว่าเกิด "ตอนไหน"** วันนี้โอมจะหั่นสัญญาณเป็นเฟรม คูณ window แล้ว FFT ทีละเฟรม จนได้ spectrogram ที่เห็นทั้งเวลาและความถี่ สิ่งนี้คือสิ่งที่ `librosa.stft` ทำ และเป็นฐานของ `Mel spectrogram`, MFCC และ `Chroma` ที่จะใช้เป็น feature ของเพลง
+
+**Tasks :**
+- [ ] ST1 (โค้ด + สังเกต) Spectral leakage และ Hann window
+  - **ทำ:**
+    - สร้าง notebook ใหม่ `notebooks/06_STFT.ipynb`
+    - `sr = 1000` สร้าง `t` 1 วินาที → `N` ได้ 1000
+    - `x1 = create_sin(1, 100, t)` และ `x2 = create_sin(1, 100.5, t)`
+    - คำนวณ `mag` แบบ F3 (`np.abs(np.fft.fft(x)) * 2 / N`) ของทั้งสองตัว เก็บเฉพาะครึ่งแรก
+    - print ค่าสูงสุดของ `mag` แต่ละตัว
+    - นับจำนวน bin ที่ `mag > 0.01` ของแต่ละตัว → print
+    - `w = np.hanning(N)` → ทำซ้ำกับ `x1 * w` และ `x2 * w` (print ค่าสูงสุด และจำนวน bin > 0.01)
+    - พล็อต stem ช่วง 80–120 Hz ของ `x2` แบบไม่มี window กับมี window ด้วย `plt.subplots(2, 1)`
+  - **เครื่องมือใหม่:**
+    - `np.hanning(5)` → `[0, 0.5, 1, 0.5, 0]` หน้าต่างที่ค่อย ๆ ขึ้นจาก 0 แล้วลงกลับไป 0
+    - นับจำนวนที่เข้าเงื่อนไข: `np.sum(np.array([0.5, 0.001, 0.2]) > 0.01)` → 2
+  - **ตอบ:**
+    1. ค่าสูงสุดของ `mag` ที่ 100 Hz กับ 100.5 Hz (ไม่มี window) ได้เท่าไร
+    2. `x2` มี bin ที่ > 0.01 กี่ bin ตอนไม่มี window และตอนมี window
+    3. หลังคูณ Hann ยอดของ `x1` เหลือเท่าไร
+  - **ใบ้:** 100.5 Hz ไม่ตรงกับ bin ไหนเลย (bin ห่างกัน 1 Hz) พลังงานจึง "รั่ว" ไป bin ข้าง ๆ
+  - **เสร็จเมื่อ:** ไม่มี window: ยอด 1.0 กับ ≈0.64, จำนวน bin 1 กับ 68 / มี window: `x2` เหลือ 6 bin, ยอด `x1` ≈0.5 / มีกราฟ 2 รูป และตอบครบ 3 ข้อ
+- [ ] ST2 (โค้ด) หั่นสัญญาณเป็นเฟรม แล้วย้ายฟังก์ชันเข้า `dsp/`
+  - **ทำ:**
+    - สร้างไฟล์ `dsp/spectral.py` → เขียน `frame_signal(x, frame_len, hop)` พร้อม docstring → คืน array 2 มิติ shape `(n_frames, frame_len)`
+    - เฟรมที่ m คือ `x[m*hop : m*hop + frame_len]`
+    - ทดสอบกับตัวเลขที่รู้คำตอบก่อน: `frame_signal(np.arange(10), 4, 2)` → `[[0,1,2,3], [2,3,4,5], [4,5,6,7], [6,7,8,9]]` (เช็คด้วย `np.allclose`)
+    - ลอง `frame_signal(np.arange(10), 4, 3)` → print ผลและ `.shape`
+    - `sr = 8000` สร้างโน้ต 3 ตัว ตัวละ 0.5 วินาที แอมพลิจูด 0.5 ที่ 440, 660, 880 Hz → ต่อกันเป็น `x` → `len(x)` ได้ 12000
+    - `frames = frame_signal(x, 512, 256)` → print `frames.shape`
+    - เช็ค `np.allclose(frames[3], x[768:1280])`
+  - **เครื่องมือใหม่:**
+    - ต่อ array: `np.concatenate([np.array([1, 2]), np.array([3])])` → `[1, 2, 3]`
+    - `np.array([[1, 2], [3, 4], [5, 6]]).shape` → `(3, 2)` คือ 3 แถว 2 คอลัมน์
+  - **ใบ้:** จำนวนเฟรม = `1 + (len(x) - frame_len) // hop` (`//` คือหารปัดเศษทิ้ง)
+  - **ตอบ:**
+    1. `frame_signal(np.arange(10), 4, 3)` ได้กี่เฟรม
+    2. `frames.shape` ของสัญญาณ 3 โน้ตเป็นเท่าไร
+    3. เฟรมที่ 3 เริ่มที่ sample ที่เท่าไร
+  - **เสร็จเมื่อ:** import `frame_signal` จาก `dsp.spectral` ได้ / ทดสอบตัวเลขเล็กได้ True / shape ได้ `(45, 512)` / `np.allclose` ได้ True และตอบครบ 3 ข้อ
+- [ ] ST3 (โค้ด + หู) STFT และ spectrogram: FFT ทั้งก้อน vs ทีละเฟรม
+  - **ทำ:**
+    - ฟัง `x` จาก ST2 ด้วย `Audio(x, rate=sr)`
+    - สร้าง `x_rev` = 3 โน้ตเดิมแต่เรียงกลับ (880, 660, 440)
+    - FFT ทั้งก้อน: `np.abs(np.fft.rfft(x))` กับของ `x_rev` → เช็ค `np.allclose` ของสองตัวนี้
+    - STFT: `frames * np.hanning(512)` → `S = np.abs(np.fft.rfft(..., axis=1))` → print `S.shape`
+    - `freqs = np.fft.rfftfreq(512, 1/sr)` → print `freqs[1] - freqs[0]`
+    - print `freqs[np.argmax(S[m])]` ที่ m = 5, 20, 40
+    - ทำ STFT ของ `x_rev` แบบเดียวกัน → พล็อต spectrogram ของ `x` กับ `x_rev` ด้วย `plt.subplots(1, 2)` (แกน x = เวลา s, แกน y = Hz)
+  - **เครื่องมือใหม่:**
+    - `np.fft.rfft(a, axis=1)` → FFT ทีละแถว และเก็บแค่ 0 ถึง sr/2 จึงได้ `frame_len // 2 + 1` คอลัมน์
+    - `np.fft.rfftfreq(4, 1/8)` → `[0, 2, 4]` คือความถี่ (Hz) ของแต่ละคอลัมน์
+    - `ax.imshow(S.T, origin='lower', aspect='auto', extent=[0, len(x)/sr, 0, sr/2])` → `.T` สลับแถวกับคอลัมน์ ให้เวลาอยู่แกน x
+  - **ตอบ:**
+    1. `np.allclose` ของ FFT ทั้งก้อน (`x` กับ `x_rev`) ได้ True หรือ False
+    2. ที่ m = 20 ความถี่ที่ดังสุดคือกี่ Hz
+    3. `freqs[1] - freqs[0]` ได้กี่ Hz
+  - **เสร็จเมื่อ:** `np.allclose` ได้ True / `S.shape` ได้ `(45, 257)` / m = 5, 20, 40 ได้ 437.5, 656.25, 875.0 / ระยะ bin 15.625 / มี spectrogram 2 รูปที่เห็นเส้นเป็นขั้นบันไดคนละทิศ และตอบครบ 3 ข้อ
+- [ ] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
+
+---
