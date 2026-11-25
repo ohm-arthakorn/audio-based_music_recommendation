@@ -270,3 +270,63 @@
 - [x] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
 
 ---
+
+**Date :** 25 November 2026 (25 พฤศจิกายน 2569)
+
+**Goals :** ปิด Unit 5 STFT: เขียน `stft()` ของตัวเองแล้วเทียบกับ `librosa`, ดู spectrogram แบบ dB และเห็น trade-off ระหว่างความละเอียดเวลากับความถี่
+
+**Objective :** เมื่อวานโอมได้ spectrogram จากการหั่นเฟรมเอง วันนี้จะรวมเป็นฟังก์ชันเดียวใน `dsp/` แล้วพิสูจน์ว่าได้ผลเท่ากับ `librosa.stft` จากนั้นจะเห็นว่าทำไมต้องดู spectrogram แบบ dB และทำไม `n_fft` (frame_len) ต้องเลือกแบบได้อย่างเสียอย่าง สองเรื่องนี้คือค่าที่ต้องตั้งตอนดึง `Mel spectrogram`, MFCC และ `Chroma` จากเพลงจริง
+
+**Tasks :**
+- [] ST4 (โค้ด) เขียน `stft()` เข้า `dsp/spectral.py` แล้วเทียบกับ `librosa.stft`
+  - **ทำ:**
+    - ทำต่อใน `notebooks/06_STFT.ipynb`
+    - เพิ่ม `stft(x, frame_len, hop)` พร้อม docstring ใน `dsp/spectral.py` → ข้างในเรียก `frame_signal` → คูณ `np.hanning(frame_len)` → `np.abs(np.fft.rfft(..., axis=1))`
+    - ทดสอบกับ `x` 3 โน้ตจาก ST2: `S = stft(x, 512, 256)` → print `S.shape`
+    - `L = librosa.stft(x, n_fft=512, hop_length=256, window=np.hanning(512), center=False)` → print `L.shape`
+    - เช็ค `np.allclose(S, np.abs(L).T)`
+    - เรียก `librosa.stft(x, n_fft=512, hop_length=256)` แบบค่า default → print `.shape`
+  - **เครื่องมือใหม่:**
+    - `librosa.stft` คืนค่าเป็นจำนวนเชิงซ้อน shape `(ความถี่, เฟรม)` สลับกับของเรา จึงต้อง `np.abs(...)` แล้ว `.T`
+    - `center=True` (ค่า default) จะเติม 0 หน้าและหลังสัญญาณข้างละ `n_fft // 2` ก่อนหั่นเฟรม
+  - **ตอบ:**
+    1. `L.shape` ได้เท่าไร
+    2. `np.allclose(S, np.abs(L).T)` ได้ True หรือ False
+    3. แบบ default ได้กี่เฟรม
+  - **เสร็จเมื่อ:** import `stft` จาก `dsp.spectral` ได้ / `S.shape` ได้ `(45, 257)` / `L.shape` ได้ `(257, 45)` / `np.allclose` ได้ True / แบบ default ได้ `(257, 47)` และตอบครบ 3 ข้อ
+- [ ] ST5 (โค้ด + สังเกต) Spectrogram แบบ dB: เห็นเสียงเบาที่ซ่อนอยู่
+  - **ทำ:**
+    - `sr = 8000` สร้าง `t` 1 วินาที → `x = create_sin(1, 500, t) + create_sin(0.01, 1500, t)`
+    - `S = stft(x, 512, 256)` → print `S.shape`
+    - `freqs = np.fft.rfftfreq(512, 1/sr)` → หา index ของ 500 Hz กับ 1500 Hz
+    - print `S[10]` ที่ 500 Hz, ที่ 1500 Hz และผลหารของสองค่านี้
+    - `S_db = 20 * np.log10(S + 1e-10)` → print `S_db[10]` ที่ 500 Hz, ที่ 1500 Hz และผลต่างของสองค่านี้
+    - พล็อต spectrogram ของ `S` กับ `S_db` ด้วย `plt.subplots(1, 2)` (แบบ dB ใส่ `vmin=S_db.max() - 80`)
+  - **เครื่องมือใหม่:**
+    - dB ของขนาด: `20 * np.log10(10)` → 20, `20 * np.log10(0.1)` → -20 (ขนาดต่างกัน 10 เท่า = ต่างกัน 20 dB)
+    - `ax.imshow(..., vmin=-5)` → ค่าที่ต่ำกว่า -5 จะเป็นสีเดียวกันหมด กราฟจะไม่ถูกค่าติดลบมาก ๆ ดึงสีไปใช้หมด
+  - **ใบ้:** บวก `1e-10` ไว้กัน `log10(0)` ซึ่งได้ `-inf`
+  - **ตอบ:**
+    1. ผลหาร `S` ที่ 500 Hz ต่อ 1500 Hz ได้เท่าไร
+    2. ผลต่าง dB ของสองความถี่นี้ได้กี่ dB
+    3. เส้น 1500 Hz มองเห็นในรูปไหน: แบบเส้นตรง (linear), แบบ dB หรือทั้งสองรูป
+  - **เสร็จเมื่อ:** `S.shape` ได้ `(30, 257)` / index ได้ 32 กับ 96 / ผลหาร ≈100 / `S_db` ที่ 500 Hz ≈42.1 และผลต่าง ≈40.0 dB / มีกราฟ 2 รูป และตอบครบ 3 ข้อ
+- [ ] ST6 (โค้ด + สังเกต) Trade-off: เฟรมสั้นเห็นเวลาชัด เฟรมยาวเห็นความถี่ชัด
+  - **ทำ:**
+    - `sr = 8000` สร้าง `t` 1 วินาที → `x = create_sin(0.5, 440, t) + create_sin(0.5, 470, t)`
+    - ใส่เสียงคลิก: `x[2000] += 1` → คือเวลา 0.25 วินาที
+    - ใช้ `for frame_len in [128, 2048]:` โดย `hop = frame_len // 4` (ห้าม copy โค้ดสองชุด)
+    - ในลูป: `S = stft(x, frame_len, hop)` → print ระยะ bin (Hz) และความยาวเฟรม (ms)
+    - ในลูป: เฟรมกลาง `m = len(S) // 2` → พล็อต stem ของ `S[m]` ช่วง 300–600 Hz
+    - ในลูป: พล็อต spectrogram แบบ dB (`vmin=S_db.max() - 80`)
+  - **เครื่องมือใหม่:**
+    - วางกราฟในลูป: `fig, axes = plt.subplots(2, 2)` แล้วใช้ `for i, frame_len in enumerate([128, 2048]):` → วาดลง `axes[i, 0]` กับ `axes[i, 1]`
+    - `enumerate(['a', 'b'])` → ได้ `(0, 'a')`, `(1, 'b')`
+  - **ตอบ:**
+    1. `frame_len = 2048` มีระยะ bin กี่ Hz
+    2. `frame_len` ไหนที่เห็นยอด 440 กับ 470 Hz แยกเป็น 2 ยอด
+    3. `frame_len` ไหนที่แถบแนวตั้งของเสียงคลิกใน spectrogram แคบกว่า
+  - **เสร็จเมื่อ:** 128: ระยะ bin 62.5 Hz, เฟรมยาว 16 ms, เห็นยอดเดียวที่ ≈437.5 Hz / 2048: ระยะ bin ≈3.91 Hz, เฟรมยาว 256 ms, เห็น 2 ยอดที่ ≈441 กับ ≈469 Hz / มีกราฟ 4 รูปจากลูปเดียว และตอบครบ 3 ข้อ
+- [ ] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
+
+---
