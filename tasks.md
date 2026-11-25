@@ -294,7 +294,7 @@
     2. `np.allclose(S, np.abs(L).T)` ได้ True หรือ False
     3. แบบ default ได้กี่เฟรม
   - **เสร็จเมื่อ:** import `stft` จาก `dsp.spectral` ได้ / `S.shape` ได้ `(45, 257)` / `L.shape` ได้ `(257, 45)` / `np.allclose` ได้ True / แบบ default ได้ `(257, 47)` และตอบครบ 3 ข้อ
-- [ ] ST5 (โค้ด + สังเกต) Spectrogram แบบ dB: เห็นเสียงเบาที่ซ่อนอยู่
+- [x] ST5 (โค้ด + สังเกต) Spectrogram แบบ dB: เห็นเสียงเบาที่ซ่อนอยู่
   - **ทำ:**
     - `sr = 8000` สร้าง `t` 1 วินาที → `x = create_sin(1, 500, t) + create_sin(0.01, 1500, t)`
     - `S = stft(x, 512, 256)` → print `S.shape`
