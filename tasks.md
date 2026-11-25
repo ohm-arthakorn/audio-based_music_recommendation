@@ -278,7 +278,7 @@
 **Objective :** เมื่อวานโอมได้ spectrogram จากการหั่นเฟรมเอง วันนี้จะรวมเป็นฟังก์ชันเดียวใน `dsp/` แล้วพิสูจน์ว่าได้ผลเท่ากับ `librosa.stft` จากนั้นจะเห็นว่าทำไมต้องดู spectrogram แบบ dB และทำไม `n_fft` (frame_len) ต้องเลือกแบบได้อย่างเสียอย่าง สองเรื่องนี้คือค่าที่ต้องตั้งตอนดึง `Mel spectrogram`, MFCC และ `Chroma` จากเพลงจริง
 
 **Tasks :**
-- [] ST4 (โค้ด) เขียน `stft()` เข้า `dsp/spectral.py` แล้วเทียบกับ `librosa.stft`
+- [x] ST4 (โค้ด) เขียน `stft()` เข้า `dsp/spectral.py` แล้วเทียบกับ `librosa.stft`
   - **ทำ:**
     - ทำต่อใน `notebooks/06_STFT.ipynb`
     - เพิ่ม `stft(x, frame_len, hop)` พร้อม docstring ใน `dsp/spectral.py` → ข้างในเรียก `frame_signal` → คูณ `np.hanning(frame_len)` → `np.abs(np.fft.rfft(..., axis=1))`
