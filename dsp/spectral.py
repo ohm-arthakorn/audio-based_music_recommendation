@@ -22,6 +22,26 @@ def frame_signal(x, frame_len, hop):
 
     return np.array(x_out)
 
+def stft(x, frame_len, hop):
+    """
+        Compute the Short time Fourier Transform (STFT) of an audio signal.
+
+        Args:
+        x: 1D array representing the input time-domain signal.
+        frame_len: Number of samples each segments.
+        hop: Number of samples between adjacent frames.
+
+        Returns:
+        S: 2D array rows representing a frames of signal (time duration) and 
+        column representing a FFT of signal.
+    """
+    frames = frame_signal(x, frame_len, hop)
+    frames_window = frames * np.hanning(frame_len)
+
+    # Performs FFT each rows (axis=1 means row.)
+    S = np.abs(np.fft.rfft(frames_window, axis=1))
+    return S
+
 if __name__ == "__main__":
     test_1 = frame_signal(np.arange(10), 4, 2)
 
