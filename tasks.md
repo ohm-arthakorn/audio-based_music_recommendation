@@ -327,6 +327,6 @@
     2. `frame_len` ไหนที่เห็นยอด 440 กับ 470 Hz แยกเป็น 2 ยอด
     3. `frame_len` ไหนที่แถบแนวตั้งของเสียงคลิกใน spectrogram แคบกว่า
   - **เสร็จเมื่อ:** 128: ระยะ bin 62.5 Hz, เฟรมยาว 16 ms, เห็นยอดเดียวที่ ≈437.5 Hz / 2048: ระยะ bin ≈3.91 Hz, เฟรมยาว 256 ms, เห็น 2 ยอดที่ ≈441 กับ ≈469 Hz / มีกราฟ 4 รูปจากลูปเดียว และตอบครบ 3 ข้อ
-- [] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
+- [x] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
 
 ---
