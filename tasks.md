@@ -330,3 +330,58 @@
 - [x] Restart & Run All แล้ว commit notebook, `dsp/spectral.py`, `log.md` และ `tasks.md`
 
 ---
+
+**Date :** 26 November 2026 (26 พฤศจิกายน 2569)
+
+**Goals :** เริ่ม Unit 6 Filters/convolution: เขียน `convolve()` เองให้ตรงกับ `np.convolve` แล้วเห็นว่า moving average คือ low-pass filter
+
+**Objective :** Convolution คือการ "เลื่อน คูณ บวก" kernel ไปตามสัญญาณ และ moving average ก็คือ convolution แบบหนึ่ง วันนี้โอมจะเห็นว่ามันลดเสียงแหลมแต่เก็บเสียงทุ้มไว้ และทำนายผลนี้ได้ล่วงหน้าจาก FFT ของ kernel แนวคิดนี้คือพื้นฐานของ Mel filterbank ที่จะใช้ดึง feature เพลงใน Unit 7
+
+**Tasks :**
+- [ ] C1 (ทฤษฎี + โค้ด) Convolution คือ "เลื่อน คูณ บวก" — อ่าน ThinkDSP บทที่ 8 หัวข้อ 8.1 Smoothing และ 8.2 Convolution
+  - **ทำ:**
+    - สร้าง notebook ใหม่ `notebooks/07_Filters.ipynb`
+    - ทำนายก่อนรัน: convolution ของ `x = [1, 2, 3, 4]` กับ `h = [0.5, 0.5]` คิดมือ เขียนผลลง markdown
+    - สร้างไฟล์ `dsp/filters.py` → เขียน `convolve(x, h)` พร้อม docstring ใช้ loop ซ้อน 2 ชั้นตามสูตร $y[n] = \sum_k h[k]\,x[n-k]$
+    - ความยาวผลลัพธ์ = `len(x) + len(h) - 1` → ข้าม `x[n-k]` ที่ index อยู่นอกช่วง 0 ถึง `len(x) - 1`
+    - ทดสอบกับตัวเลขที่ทำนายไว้ → เช็ค `np.allclose` กับ `np.convolve(x, h)`
+    - ทดสอบ impulse: `convolve([0, 0, 1, 0, 0], [1, 2, 3])` → print ผล
+  - **ตอบ:**
+    1. `len` ของผลลัพธ์ `[1, 2, 3, 4]` กับ `[0.5, 0.5]` ได้เท่าไร
+    2. `np.allclose` กับ `np.convolve` ได้ True หรือ False
+    3. ผล impulse test มีตัวเลข `[1, 2, 3]` เริ่มที่ index ไหน
+  - **เสร็จเมื่อ:** import `convolve` จาก `dsp.filters` ได้ / ผลได้ `[0.5, 1.5, 2.5, 3.5, 2.0]` / `np.allclose` ได้ True / impulse test ได้ `[0, 0, 1, 2, 3, 0, 0]` และตอบครบ 3 ข้อ
+- [ ] C2 (โค้ด + หู) Moving average เป็น low-pass filter
+  - **ทำ:**
+    - `sr = 8000` สร้าง `t` 1 วินาที → `x = create_sin(1, 200, t) + create_sin(0.5, 2500, t)`
+    - kernel moving average 8 จุด: `h = np.ones(8) / 8`
+    - `y = np.convolve(x, h, mode='same')` → print `len(y)`
+    - `X = np.abs(np.fft.rfft(x))`, `Y = np.abs(np.fft.rfft(y))`, `freqs = np.fft.rfftfreq(len(x), 1/sr)`
+    - หา index ของ 200 Hz กับ 2500 Hz → print gain `Y / X` ที่สองความถี่นี้
+    - ฟัง `x` กับ `y` ด้วย `Audio(..., rate=sr)`
+  - **เครื่องมือใหม่:**
+    - `np.convolve([1, 2, 3], [1, 1], mode='same')` → `[1, 3, 5]` (ตัดให้ยาวเท่า input ส่วนแบบ default ได้ `[1, 3, 5, 3]`)
+  - **ใบ้:** C1 ผ่านแล้วใช้ `np.convolve` แทน `convolve` ของเราได้ เพราะเร็วกว่ามาก
+  - **ตอบ:**
+    1. gain ที่ 200 Hz ได้เท่าไร
+    2. gain ที่ 2500 Hz ได้เท่าไร
+    3. ฟัง `y` แล้วเสียงไหนเบาลงชัด: เสียงทุ้ม หรือเสียงแหลม
+  - **เสร็จเมื่อ:** `len(y)` ได้ 8000 / index ได้ 200 กับ 2500 / gain ≈0.936 กับ ≈0.150 และตอบครบ 3 ข้อ
+- [ ] C3 (โค้ด + สังเกต) Frequency response = FFT ของ kernel — อ่าน ThinkDSP หัวข้อ 8.3 The frequency domain
+  - **ทำ:**
+    - `H = np.abs(np.fft.rfft(h, n=8000))` → `freqs_h = np.fft.rfftfreq(8000, 1/sr)` → print `len(H)`
+    - print `H` ที่ 200 Hz กับ 2500 Hz → เทียบกับ gain จาก C2
+    - ใช้ `for M in [4, 8, 16]:` (ห้าม copy โค้ด 3 ชุด) สร้าง `h = np.ones(M) / M` แล้วคำนวณ `H`
+    - ในลูป: หาความถี่แรกที่ `H` ลงไปเป็น 0 (`H < 1e-6`) → print คู่กับ `M`
+    - ในลูป: พล็อต `H` เทียบ `freqs_h` ทั้ง 3 เส้นในกราฟเดียว (มี legend บอก M)
+  - **เครื่องมือใหม่:**
+    - `np.fft.rfft([1, 1], n=4)` → เติม 0 ท้ายให้ยาว 4 ก่อน FFT ได้ bin ละเอียดขึ้น
+    - `np.argmax(np.array([5, 3, 0, 2]) < 1)` → 2 คือ index แรกที่เงื่อนไขเป็น True
+  - **ตอบ:**
+    1. `M = 8` มี `H` ที่ 2500 Hz เท่าไร
+    2. `M = 8` มี `H` เป็น 0 ครั้งแรกที่กี่ Hz
+    3. `M` ไหนที่ปล่อยให้ความถี่ผ่านได้แคบที่สุด
+  - **เสร็จเมื่อ:** `len(H)` ได้ 4001 / M = 8: `H` ที่ 200 Hz ≈0.936 และที่ 2500 Hz ≈0.150 ตรงกับ C2 / ความถี่ที่เป็น 0 ครั้งแรก M = 4, 8, 16 ได้ 2000, 1000, 500 Hz / มีกราฟ 3 เส้นจากลูปเดียว และตอบครบ 3 ข้อ
+- [ ] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
+
+---
