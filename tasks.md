@@ -351,7 +351,7 @@
     2. `np.allclose` กับ `np.convolve` ได้ True หรือ False
     3. ผล impulse test มีตัวเลข `[1, 2, 3]` เริ่มที่ index ไหน
   - **เสร็จเมื่อ:** import `convolve` จาก `dsp.filters` ได้ / ผลได้ `[0.5, 1.5, 2.5, 3.5, 2.0]` / `np.allclose` ได้ True / impulse test ได้ `[0, 0, 1, 2, 3, 0, 0]` และตอบครบ 3 ข้อ
-- [ ] C2 (โค้ด + หู) Moving average เป็น low-pass filter
+- [x] C2 (โค้ด + หู) Moving average เป็น low-pass filter
   - **ทำ:**
     - `sr = 8000` สร้าง `t` 1 วินาที → `x = create_sin(1, 200, t) + create_sin(0.5, 2500, t)`
     - kernel moving average 8 จุด: `h = np.ones(8) / 8`
