@@ -385,3 +385,62 @@
 - [x] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
 
 ---
+
+**Date :** 28 November 2026 (28 พฤศจิกายน 2569)
+
+**Goals :** ปิด Unit 6 Filters: พิสูจน์ convolution theorem, สร้าง high-pass filter และใช้ convolution ทำเสียง echo
+
+**Objective :** เมื่อวานโอมเห็นว่า gain ของ filter ทำนายได้จาก FFT ของ kernel วันนี้จะพิสูจน์ว่า **convolution ในเวลา = การคูณกันในความถี่** ซึ่งทำให้คำนวณเร็วขึ้นหลายพันเท่า แล้วจะเห็นว่าแค่เปลี่ยน kernel ก็ได้ filter แบบตรงข้าม (high-pass) หรือได้ echo การ "คูณ spectrum ด้วยรูปร่างของ filter" คือสิ่งที่ Mel filterbank ทำใน Unit 7
+
+**Tasks :**
+- [ ] F1 (ทฤษฎี + โค้ด) Convolution theorem — อ่าน ThinkDSP หัวข้อ 8.4 The convolution theorem และ 8.6 Efficient convolution
+  - **ทำ:**
+    - ทำต่อใน `notebooks/07_Filters.ipynb`
+    - เขียนสรุป convolution theorem ด้วยคำของตัวเอง 2–3 ประโยคลง markdown
+    - `x = [1, 2, 3, 4]`, `h = [0.5, 0.5]` → `n = len(x) + len(h) - 1`
+    - FFT ทั้งสองตัวด้วย `n=n` → คูณกัน → `np.fft.ifft(...).real` → print ผล
+    - เช็ค `np.allclose` กับ `np.convolve(x, h)`
+    - ทำซ้ำแต่ใช้ `n=4` (ไม่เติม 0 ให้พอ) → print ผล
+    - เพิ่ม `fft_convolve(x, h)` พร้อม docstring ใน `dsp/filters.py` → ทดสอบกับ `[1, 2, 3, 4]` ก่อน
+    - ทดสอบกับสัญญาณยาว: `x` จาก C2 กับ `h = np.ones(8) / 8` → เช็ค `np.allclose` กับ `np.convolve` (แบบ default) และ print `len`
+  - **เครื่องมือใหม่:**
+    - `np.fft.ifft(np.fft.fft([1, 2]))` → `[1, 2]` (แปลงกลับเป็นสัญญาณเวลา แต่ได้เป็นเชิงซ้อน)
+    - `.real` → เอาเฉพาะส่วนจริง: `np.array([1+0j, 2+0j]).real` → `[1., 2.]`
+  - **ตอบ:**
+    1. ผลจาก FFT ด้วย `n=5` ได้อะไร
+    2. ผลด้วย `n=4` ตัวแรกได้เท่าไร
+    3. ตัวแรกนั้นเท่ากับ 0.5 บวกกับตัวไหนของผลที่ถูกต้อง
+  - **เสร็จเมื่อ:** `n=5` ได้ `[0.5, 1.5, 2.5, 3.5, 2.0]` / `n=4` ได้ `[2.5, 1.5, 2.5, 3.5]` / import `fft_convolve` จาก `dsp.filters` ได้ / สัญญาณยาวได้ True และ `len` 8007 และตอบครบ 3 ข้อ
+- [ ] F2 (โค้ด + หู) High-pass filter จาก kernel `[1, -1]`
+  - **ทำ:**
+    - ทำนายก่อนรัน: moving average คือ "เฉลี่ย" ค่าข้างกัน ส่วน `[1, -1]` คือ "ลบ" ค่าข้างกัน → sine ความถี่ต่ำ (ค่าข้างกันเกือบเท่ากัน) จะเหลือมากหรือน้อย เขียนลง markdown
+    - ใช้ `x` จาก C2 (200 Hz + 2500 Hz, `sr = 8000`)
+    - `y = np.convolve(x, [1, -1], mode='same')` → print gain `Y / X` ที่ 200 Hz กับ 2500 Hz (วิธีเดียวกับ C2)
+    - `H = np.abs(np.fft.rfft([1, -1], n=8000))` → print `H` ที่ 0 Hz, 200 Hz, 2500 Hz และ 4000 Hz
+    - พล็อต `H` ของ `[1, -1]` กับ `np.ones(8) / 8` ในกราฟเดียว (มี legend)
+    - ฟัง `x` กับ `y` ด้วย `Audio(..., rate=sr)`
+  - **ตอบ:**
+    1. gain ที่ 200 Hz ได้เท่าไร
+    2. gain ที่ 2500 Hz ได้เท่าไร
+    3. ฟัง `y` แล้วเสียงไหนเบาลงชัด: เสียงทุ้ม หรือเสียงแหลม
+  - **เสร็จเมื่อ:** gain ≈0.157 กับ ≈1.663 / `H` ที่ 0, 200, 2500, 4000 Hz ได้ 0, ≈0.157, ≈1.663, 2.0 / มีกราฟ 2 เส้นที่ไขว้กัน และตอบครบ 3 ข้อ
+- [ ] F3 (โค้ด + หู) Echo = convolution กับ impulse response
+  - **ทำ:**
+    - `sr = 8000` สร้างโน้ต 440 Hz แอมพลิจูด 0.5 ยาว 0.2 วินาที → `len` ได้ 1600
+    - kernel echo: `h = np.zeros(2401)` → `h[0] = 1`, `h[2400] = 0.5` (ดีเลย์ 0.3 วินาที เบาลงครึ่งหนึ่ง)
+    - `y = fft_convolve(note, h)` → print `len(y)`
+    - หา index แรกหลัง 1600 ที่ `np.abs(y) > 0.01` → แปลงเป็นวินาที
+    - print ค่าสูงสุดของ `np.abs(y)` ในช่วงก่อน 1600 และหลัง 1600
+    - วัดเวลา `convolve(note, h)` (ของเราจาก C1) เทียบกับ `fft_convolve(note, h)` → เช็ค `np.allclose` ของผลทั้งสอง
+    - ฟัง `note` กับ `y` ด้วย `Audio(..., rate=sr)`
+  - **เครื่องมือใหม่:**
+    - วัดเวลา: `import time` → `t0 = time.perf_counter()` → รันโค้ด → `time.perf_counter() - t0` ได้เวลาเป็นวินาที
+  - **ใบ้:** `convolve` ของเราต้องวน loop ประมาณ 4000 × 2401 รอบ ใช้เวลาหลายวินาทีเป็นเรื่องปกติ
+  - **ตอบ:**
+    1. `len(y)` ได้เท่าไร
+    2. echo เริ่มที่กี่วินาที
+    3. แอมพลิจูดสูงสุดของ echo ได้เท่าไร
+  - **เสร็จเมื่อ:** `len(y)` ได้ 4000 / echo เริ่ม ≈0.30 s (index 2401 เพราะ sample แรกของ sine เป็น 0) / สูงสุดก่อน 1600 ได้ 0.5 หลัง 1600 ได้ 0.25 / `np.allclose` ได้ True และ `fft_convolve` เร็วกว่ามากกว่า 100 เท่า / ฟังแล้วได้ยินโน้ต 2 ครั้ง และตอบครบ 3 ข้อ
+- [ ] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
+
+---
