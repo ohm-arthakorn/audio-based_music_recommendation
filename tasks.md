@@ -331,14 +331,14 @@
 
 ---
 
-**Date :** 26 November 2026 (26 พฤศจิกายน 2569)
+**Date :** 26–27 November 2026 (26–27 พฤศจิกายน 2569)
 
 **Goals :** เริ่ม Unit 6 Filters/convolution: เขียน `convolve()` เองให้ตรงกับ `np.convolve` แล้วเห็นว่า moving average คือ low-pass filter
 
 **Objective :** Convolution คือการ "เลื่อน คูณ บวก" kernel ไปตามสัญญาณ และ moving average ก็คือ convolution แบบหนึ่ง วันนี้โอมจะเห็นว่ามันลดเสียงแหลมแต่เก็บเสียงทุ้มไว้ และทำนายผลนี้ได้ล่วงหน้าจาก FFT ของ kernel แนวคิดนี้คือพื้นฐานของ Mel filterbank ที่จะใช้ดึง feature เพลงใน Unit 7
 
 **Tasks :**
-- [ ] C1 (ทฤษฎี + โค้ด) Convolution คือ "เลื่อน คูณ บวก" — อ่าน ThinkDSP บทที่ 8 หัวข้อ 8.1 Smoothing และ 8.2 Convolution
+- [x] C1 (ทฤษฎี + โค้ด) Convolution คือ "เลื่อน คูณ บวก" — อ่าน ThinkDSP บทที่ 8 หัวข้อ 8.1 Smoothing และ 8.2 Convolution
   - **ทำ:**
     - สร้าง notebook ใหม่ `notebooks/07_Filters.ipynb`
     - ทำนายก่อนรัน: convolution ของ `x = [1, 2, 3, 4]` กับ `h = [0.5, 0.5]` คิดมือ เขียนผลลง markdown
