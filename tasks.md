@@ -367,7 +367,7 @@
     2. gain ที่ 2500 Hz ได้เท่าไร
     3. ฟัง `y` แล้วเสียงไหนเบาลงชัด: เสียงทุ้ม หรือเสียงแหลม
   - **เสร็จเมื่อ:** `len(y)` ได้ 8000 / index ได้ 200 กับ 2500 / gain ≈0.936 กับ ≈0.150 และตอบครบ 3 ข้อ
-- [ ] C3 (โค้ด + สังเกต) Frequency response = FFT ของ kernel — อ่าน ThinkDSP หัวข้อ 8.3 The frequency domain
+- [x] C3 (โค้ด + สังเกต) Frequency response = FFT ของ kernel — อ่าน ThinkDSP หัวข้อ 8.3 The frequency domain
   - **ทำ:**
     - `H = np.abs(np.fft.rfft(h, n=8000))` → `freqs_h = np.fft.rfftfreq(8000, 1/sr)` → print `len(H)`
     - print `H` ที่ 200 Hz กับ 2500 Hz → เทียบกับ gain จาก C2
