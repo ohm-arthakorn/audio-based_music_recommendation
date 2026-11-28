@@ -500,6 +500,6 @@
     2. 3000 Hz กับ 3100 Hz ดังที่สุดในแถบเดียวกันหรือคนละแถบ
     3. `np.allclose(M, L.T)` ได้ True หรือ False
   - **เสร็จเมื่อ:** แถบที่ดังที่สุดของ 200, 300, 3000, 3100 Hz ได้ 0, 1, 9, 9 / `L.shape` ได้ `(10, 30)` / `allclose` ได้ True และตอบครบ
-- [ ] Restart & Run All แล้ว commit notebook, `dsp/features.py`, `log.md` และ `tasks.md`
+- [x] Restart & Run All แล้ว commit notebook, `dsp/features.py`, `log.md` และ `tasks.md`
 
 ---
