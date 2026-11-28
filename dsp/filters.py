@@ -20,15 +20,39 @@ def convolve(x, h):
                 continue
             y[n] += h[k] * x[i]
     return y
-    
+
+def fft_convolve(x, h):
+    """
+        Compute convolution with convolution theorem, convolve(x,h) = IDFT(DFT(x) * DFT(h)) 
+
+        Args:
+            x: Input signal array. 
+            h: The filter coefficients or window (In ThinkDSP).
+
+        Returns:
+            The output array of Convolution.
+    """
+    n = len(x)+len(h)-1
+    X = np.fft.fft(x, n=n)
+    H = np.fft.fft(h, n=n)
+    Y = X * H
+    y = np.fft.ifft(Y).real
+    return y
+
 if __name__ == "__main__":
     # Test Program
     x = np.array([1,2,3,4])
     h = np.array([0.5, 0.5])
 
-    print("Test program.")
-    print(convolve(x,h))
+    # print("Test program.")
+    # print(convolve(x,h))
 
-    print("Verify whether the value of np.convolve(x,h) = convolve(x,h) by using np.allclose()")
-    print(f"{np.allclose(convolve(x,h),np.convolve(x,h))}")
+    # print("Verify whether the value of np.convolve(x,h) = convolve(x,h) by using np.allclose()")
+    # print(f"{np.allclose(convolve(x,h),np.convolve(x,h))}")
 
+    # Test fft_convolve()
+    print("Test fft_convolve()")
+    print(fft_convolve(x,h))
+    
+    print("Verify whether the value of np.convolve(x,h) = fft_convolve(x,h) by using np.allclose()")
+    print(f"{np.allclose(fft_convolve(x,h),np.convolve(x,h))}")
