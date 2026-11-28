@@ -444,3 +444,62 @@
 - [x] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
 
 ---
+
+**Date :** 29 November 2026 (29 พฤศจิกายน 2569)
+
+**Goals :** เริ่ม Unit 7 Perception: เขียน Mel scale และ Mel filterbank เองให้ตรงกับ `librosa` แล้วใช้สร้าง Mel spectrogram
+
+**Objective :** **หูคนแยกเสียงต่ำได้ดีกว่าเสียงสูง** Mel scale คือ ไม้บรรทัดความถี่ตามหู วันนี้จะแปลง Hz เป็น mel เอง วาง filter สามเหลี่ยมให้ห่างเท่ากันบนไม้บรรทัดนี้ แล้วคูณกับ spectrogram ได้ Mel spectrogram ซึ่งเป็นขั้นแรกของ MFCC ที่ใช้วัด "เนื้อเสียง" ของเพลง
+
+**Tasks :**
+- [x] P1 (ทฤษฎี + โค้ด + หู) Mel scale — อ่าน Wikipedia "Mel scale" ย่อหน้าแรกและหัวข้อ Formula
+  - **ทำ:**
+    - สร้าง `notebooks/08_Perception.ipynb` ใช้ `sr = 8000`
+    - `pair_low` = 200 Hz 0.5 วินาที ต่อด้วย 300 Hz 0.5 วินาที (แอมพลิจูด 0.5, ใช้ `np.concatenate`) → ยาว 8000 sample
+    - `pair_high` = 3000 Hz ต่อด้วย 3100 Hz แบบเดียวกัน
+    - ฟังทั้งสองคู่ แล้วเขียน markdown 1 ประโยค: คู่ไหนได้ยินเสียงเปลี่ยนชัดกว่า (ทั้งคู่ห่างกัน 100 Hz)
+    - สร้าง `dsp/features.py` แล้วเขียน `hz_to_mel(f)` และ `mel_to_hz(m)` พร้อม docstring
+    - ทดสอบ: print `hz_to_mel` ของ 0, 700, 1000 Hz
+    - ทดสอบไป-กลับและเทียบ librosa ด้วย `f_test = np.array([0, 440, 4000])` (ใช้ `np.allclose` ทั้งสองอัน)
+    - print ระยะ mel ของคู่ต่ำ (300 Hz − 200 Hz) และคู่สูง (3100 Hz − 3000 Hz)
+  - **เครื่องมือใหม่:** `10 ** 2` → `100` / `librosa.hz_to_mel(700, htk=True)` → ≈781.17 (`htk=True` = สูตรเดียวกับเรา)
+  - **ใบ้:** $m = 2595 \log_{10}(1 + f/700)$ และ $f = 700\,(10^{m/2595} - 1)$ / ใช้ `np.log10` ฟังก์ชันจึงรับ array ได้ / สูตรตั้งให้ 1000 Hz ≈ 1000 mel
+  - **ตอบ:**
+    1. `hz_to_mel(700)` ได้กี่ mel
+    2. ระยะ mel ของคู่ต่ำได้กี่ mel
+    3. ระยะ mel ของคู่สูงได้กี่ mel
+  - **เสร็จเมื่อ:** 0, 700, 1000 Hz ได้ 0, ≈781.17, ≈999.99 mel / `allclose` ได้ True ทั้งสองอัน / คู่ต่ำ ≈118.7 mel คู่สูง ≈30.1 mel / ตอบครบ
+- [ ] P2 (โค้ด + สังเกต) Mel filterbank: สามเหลี่ยมที่ห่างเท่ากันบน mel
+  - **ทำ:**
+    - `freqs = np.fft.rfftfreq(512, 1/sr)` → ความถี่ (Hz) ของ 257 bin
+    - `mel_pts` = 12 จุดห่างเท่ากัน จาก `hz_to_mel(0)` ถึง `hz_to_mel(4000)` (ใช้ `np.linspace`)
+    - `hz_pts = mel_to_hz(mel_pts)` แล้ว print `np.diff` ของทั้ง `mel_pts` และ `hz_pts`
+    - สร้าง filter ตัวแรก `w` จาก `left, center, right = hz_pts[0], hz_pts[1], hz_pts[2]`: ขึ้นจาก 0 ที่ `left` ถึง 1 ที่ `center` ลงถึง 0 ที่ `right` นอกนั้นเป็น 0
+    - พล็อต `w` เทียบ `freqs` และ print `np.sum(w > 0)`
+    - เขียน `mel_filterbank(sr, n_fft, n_mels)` ใน `dsp/features.py`: ทำขั้นเดียวกัน แต่ใช้ `n_mels + 2` จุดถึง `sr / 2` แล้ววนสร้าง `fb[i]` จากจุด `i`, `i + 1`, `i + 2`
+    - `fb = mel_filterbank(8000, 512, 10)` แล้วเช็ค `fb.shape`, `np.allclose(fb[0], w)` และเทียบ `librosa.filters.mel(sr=8000, n_fft=512, n_mels=10, htk=True, norm=None)`
+    - พล็อตทั้ง 10 ตัวในกราฟเดียวด้วยลูป
+  - **เครื่องมือใหม่:** `np.linspace(0, 10, 3)` → `[0, 5, 10]` / `np.diff([0, 2, 7])` → `[2, 5]` / `np.minimum([1, 5], [3, 2])` → `[1, 2]` / `np.maximum(0, [-1, 2])` → `[0, 2]`
+  - **ใบ้:** ขาขึ้น = `(freqs - left) / (center - left)` ขาลงคิดแบบเดียวกัน แล้วรวมด้วย `np.maximum(0, np.minimum(up, down))` / 12 จุดได้ 10 ตัว เพราะต้องมีขอบซ้ายสุดและขวาสุด / `w.max()` ≈0.947 ไม่ใช่ 1 เพราะ `center` ≈132.3 Hz ไม่ตรง bin ไหน (bin ห่างกัน 15.625 Hz) / `norm=None` = ยอดสูง 1 ทุกตัว
+  - **ตอบ:**
+    1. `np.diff(mel_pts)` แต่ละช่องกว้างกี่ mel
+    2. `np.diff(hz_pts)` ช่องสุดท้ายกว้างกี่ Hz
+    3. สามเหลี่ยมตัวไหนกว้างที่สุด: ซ้ายสุด (ความถี่ต่ำ) หรือขวาสุด (ความถี่สูง)
+  - **เสร็จเมื่อ:** `np.diff(mel_pts)` ≈195.1 mel ทุกช่อง / `np.diff(hz_pts)` ช่องแรก ≈132.3 Hz ช่องสุดท้าย ≈747.1 Hz / `np.sum(w > 0)` ได้ 18 bin / `fb.shape` ได้ `(10, 257)` / เทียบ `w` และ librosa ได้ True / มีกราฟ 10 ตัว และตอบครบ
+- [ ] P3 (โค้ด + สังเกต) Mel spectrogram: ความถี่สูงที่ใกล้กันถูกรวมเป็นแถบเดียว
+  - **ทำ:**
+    - `from dsp.spectral import stft` (ฟังก์ชันจาก ST4) และสร้าง `t` ยาว 1 วินาที
+    - วน `for f in [200, 300, 3000, 3100]:` (หน่วย Hz)
+    - ในลูป: `tone` → `S = stft(tone, 512, 256)` → `P = S ** 2` → `M = P @ fb.T` ได้ shape `(30, 10)` = 30 เฟรม × 10 แถบ mel
+    - ในลูป: print `f` คู่กับ `np.argmax(M[10])` (แถบที่ดังที่สุดในเฟรม index 10)
+    - หลังลูป: `L = librosa.feature.melspectrogram(y=tone, sr=sr, n_fft=512, hop_length=256, window=np.hanning(512), center=False, n_mels=10, htk=True, norm=None)` แล้วเช็ค `np.allclose(M, L.T)`
+  - **เครื่องมือใหม่:** `@` = คูณ matrix: shape `(1, 3) @ (3, 2)` → `(1, 2)` เลขตัวกลางต้องเท่ากัน
+  - **ใบ้:** `(30, 257) @ (257, 10)` = แต่ละแถบ mel คือผลรวม power ทุก bin คูณน้ำหนักสามเหลี่ยม / ใช้ `S ** 2` เพราะ librosa ใช้ power เป็นค่า default / หลังลูป `tone` และ `M` ยังเป็นของรอบ 3100 Hz จึงเทียบ librosa ได้เลย
+  - **ตอบ:**
+    1. 200 Hz ดังที่สุดในแถบ mel index ที่เท่าไร
+    2. 3000 Hz กับ 3100 Hz ดังที่สุดในแถบเดียวกันหรือคนละแถบ
+    3. `np.allclose(M, L.T)` ได้ True หรือ False
+  - **เสร็จเมื่อ:** แถบที่ดังที่สุดของ 200, 300, 3000, 3100 Hz ได้ 0, 1, 9, 9 / `L.shape` ได้ `(10, 30)` / `allclose` ได้ True และตอบครบ
+- [ ] Restart & Run All แล้ว commit notebook, `dsp/features.py`, `log.md` และ `tasks.md`
+
+---
