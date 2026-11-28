@@ -393,7 +393,7 @@
 **Objective :** เมื่อวานโอมเห็นว่า gain ของ filter ทำนายได้จาก FFT ของ kernel วันนี้จะพิสูจน์ว่า **convolution ในเวลา = การคูณกันในความถี่** ซึ่งทำให้คำนวณเร็วขึ้นหลายพันเท่า แล้วจะเห็นว่าแค่เปลี่ยน kernel ก็ได้ filter แบบตรงข้าม (high-pass) หรือได้ echo การ "คูณ spectrum ด้วยรูปร่างของ filter" คือสิ่งที่ Mel filterbank ทำใน Unit 7
 
 **Tasks :**
-- [ ] F1 (ทฤษฎี + โค้ด) Convolution theorem — อ่าน ThinkDSP หัวข้อ 8.4 The convolution theorem และ 8.6 Efficient convolution
+- [x] F1 (ทฤษฎี + โค้ด) Convolution theorem — อ่าน ThinkDSP หัวข้อ 8.4 The convolution theorem และ 8.6 Efficient convolution
   - **ทำ:**
     - ทำต่อใน `notebooks/07_Filters.ipynb`
     - เขียนสรุป convolution theorem ด้วยคำของตัวเอง 2–3 ประโยคลง markdown
