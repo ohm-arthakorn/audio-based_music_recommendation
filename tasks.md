@@ -441,6 +441,6 @@
     2. echo เริ่มที่กี่วินาที
     3. แอมพลิจูดสูงสุดของ echo ได้เท่าไร
   - **เสร็จเมื่อ:** `len(y)` ได้ 4000 / echo เริ่ม ≈0.30 s (index 2401 เพราะ sample แรกของ sine เป็น 0) / สูงสุดก่อน 1600 ได้ 0.5 หลัง 1600 ได้ 0.25 / `np.allclose` ได้ True และ `fft_convolve` เร็วกว่ามากกว่า 100 เท่า / ฟังแล้วได้ยินโน้ต 2 ครั้ง และตอบครบ 3 ข้อ
-- [ ] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
+- [x] Restart & Run All แล้ว commit notebook, `dsp/filters.py`, `log.md` และ `tasks.md`
 
 ---
